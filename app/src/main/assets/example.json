@@ -60,6 +60,21 @@
     "FIELD13": ""
   },
   {
+    "id": 111508,
+    "routeNumber": "300",
+    "latitude": 51.071086240805506,
+    "longitude": 70.98185250333393,
+    "isStopPoint": 1,
+    "stopLatitude": 51.07103665375759,
+    "stopLongitude": 70.98217429456803,
+    "stopTitle": "Әкімат",
+    "stopTitle_ru": "Акимат",
+    "stopID": "0",
+    "isActive": 1,
+    "isShown": 1,
+    "FIELD13": ""
+  },
+  {
     "id": 111720,
     "routeNumber": "301",
     "latitude": 51.000559,

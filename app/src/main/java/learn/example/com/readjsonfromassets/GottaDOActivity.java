@@ -12,9 +12,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -25,6 +27,7 @@ public class GottaDOActivity extends AppCompatActivity {
     String data;
     TextView textView;
     JSONArray resultJson;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,11 +42,11 @@ public class GottaDOActivity extends AppCompatActivity {
 
     }
 
-    class As extends AsyncTask<String, Void, String>{
+    class As extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... strings) {
-           process();
+            process();
             return null;
         }
 
@@ -51,20 +54,19 @@ public class GottaDOActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             Log.d("ko", resultJson.toString());
-
             textView.setText(resultJson.toString());
         }
     }
 
 
-
-    public void process(){
+    public void process() {
         try {
             JSONArray jsonArray = new JSONArray(data);
 
-
+            JSONArray emptyJsonArray = new JSONArray();
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONArray trackJsonArray = new JSONArray();
+                JSONArray busStopsJsonArray = new JSONArray();
                 JSONObject newJson = new JSONObject();
                 JSONObject firstJsonObject = jsonArray.getJSONObject(i);
 
@@ -75,12 +77,25 @@ public class GottaDOActivity extends AppCompatActivity {
                 firstTrackObject.put("lon", lon);
                 trackJsonArray.put(firstTrackObject);
 
+                JSONObject stopsJsonObject = new JSONObject();
+
+                //searching for busstops point
+                if (firstJsonObject.get("isStopPoint").equals(1)) {
+                    stopsJsonObject.put("id", firstJsonObject.get("stopID"));
+                    stopsJsonObject.put("title", firstJsonObject.get("stopTitle"));
+                    stopsJsonObject.put("x", firstJsonObject.get("stopLongitude"));
+                    stopsJsonObject.put("y", firstJsonObject.get("stopLatitude"));
+                    stopsJsonObject.put("desc", "");
+                    stopsJsonObject.put("routes", emptyJsonArray);
+                    busStopsJsonArray.put(stopsJsonObject);
+                    newJson.put("busstops", busStopsJsonArray);
+                }
+
                 for (int j = i + 1; j < jsonArray.length(); j++) {
 
                     JSONObject secondJsonObject = jsonArray.getJSONObject(j);
-                    if (firstJsonObject.get("routeNumber").equals(secondJsonObject.get("routeNumber"))){
+                    if (firstJsonObject.get("routeNumber").equals(secondJsonObject.get("routeNumber"))) {
                         //if equal then create track array with lat lon
-
 
                         JSONObject secondTrackObject = new JSONObject();
                         Double lat2 = (Double) secondJsonObject.get("latitude");
@@ -91,17 +106,33 @@ public class GottaDOActivity extends AppCompatActivity {
                         trackJsonArray.put(secondTrackObject);
 
                         newJson.put("track", trackJsonArray);
-                        newJson.put("routeNumber", firstJsonObject.get("routeNumber"));
+                        newJson.put("n", firstJsonObject.get("routeNumber"));
                         newJson.put("id", firstJsonObject.get("id"));
+                        newJson.put("d", "not used");
+
+
+
+
+                        if (secondJsonObject.get("isStopPoint").equals(1)) {
+                            stopsJsonObject.put("id", secondJsonObject.get("stopID"));
+                            stopsJsonObject.put("title", secondJsonObject.get("stopTitle"));
+                            stopsJsonObject.put("x", secondJsonObject.get("stopLongitude"));
+                            stopsJsonObject.put("y", secondJsonObject.get("stopLatitude"));
+                            stopsJsonObject.put("desc", "");
+                            stopsJsonObject.put("routes", emptyJsonArray);
+                            busStopsJsonArray.put(stopsJsonObject);
+                            newJson.put("busstops", busStopsJsonArray);
+                        }
+
                         i = j;
-                    }else{
+
+                    } else {
                         break;
                     }
                 }
                 resultJson.put(newJson);
             }
         } catch (JSONException e) {
-
             e.printStackTrace();
         }
     }
