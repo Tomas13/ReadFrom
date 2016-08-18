@@ -45,6 +45,21 @@
     "FIELD13": ""
   },
   {
+    "id": 111569,
+    "routeNumber": "300",
+    "latitude": 51.098779,
+    "longitude": 71.22255,
+    "isStopPoint": 1,
+    "stopLatitude": 51.098514920627345,
+    "stopLongitude": 71.22273236040662,
+    "stopTitle": "Қараөткел ауылы",
+    "stopTitle_ru": "поселок Караоткель",
+    "stopID": "0",
+    "isActive": 1,
+    "isShown": 1,
+    "FIELD13": ""
+  },
+  {
     "id": 111494,
     "routeNumber": "300",
     "latitude": 51.066878455355976,

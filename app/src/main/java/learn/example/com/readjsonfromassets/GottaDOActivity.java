@@ -73,8 +73,8 @@ public class GottaDOActivity extends AppCompatActivity {
                 Double lat = (Double) firstJsonObject.get("latitude");
                 Double lon = (Double) firstJsonObject.get("longitude");
                 JSONObject firstTrackObject = new JSONObject();
-                firstTrackObject.put("lat", lat);
                 firstTrackObject.put("lon", lon);
+                firstTrackObject.put("lat", lat);
                 trackJsonArray.put(firstTrackObject);
 
                 JSONObject stopsJsonObject = new JSONObject();
@@ -100,27 +100,33 @@ public class GottaDOActivity extends AppCompatActivity {
                         JSONObject secondTrackObject = new JSONObject();
                         Double lat2 = (Double) secondJsonObject.get("latitude");
                         Double lon2 = (Double) secondJsonObject.get("longitude");
-                        secondTrackObject.put("lat", lat2);
                         secondTrackObject.put("lon", lon2);
+                        secondTrackObject.put("lat", lat2);
 
                         trackJsonArray.put(secondTrackObject);
 
                         newJson.put("track", trackJsonArray);
                         newJson.put("n", firstJsonObject.get("routeNumber"));
+                        newJson.put("dRu", "");
+                        newJson.put("dFromRu", "");
+                        newJson.put("dToRu", "");
                         newJson.put("id", firstJsonObject.get("id"));
                         newJson.put("d", "not used");
+                        newJson.put("dKz", "");
+                        newJson.put("descrRu", "");
+                        newJson.put("descrKz", "");
 
 
-
+                        JSONObject stopsJsonObject2 = new JSONObject();
 
                         if (secondJsonObject.get("isStopPoint").equals(1)) {
-                            stopsJsonObject.put("id", secondJsonObject.get("stopID"));
-                            stopsJsonObject.put("title", secondJsonObject.get("stopTitle"));
-                            stopsJsonObject.put("x", secondJsonObject.get("stopLongitude"));
-                            stopsJsonObject.put("y", secondJsonObject.get("stopLatitude"));
-                            stopsJsonObject.put("desc", "");
-                            stopsJsonObject.put("routes", emptyJsonArray);
-                            busStopsJsonArray.put(stopsJsonObject);
+                            stopsJsonObject2.put("id", secondJsonObject.get("stopID"));
+                            stopsJsonObject2.put("title", secondJsonObject.get("stopTitle"));
+                            stopsJsonObject2.put("x", secondJsonObject.get("stopLongitude"));
+                            stopsJsonObject2.put("y", secondJsonObject.get("stopLatitude"));
+                            stopsJsonObject2.put("desc", "");
+                            stopsJsonObject2.put("routes", emptyJsonArray);
+                            busStopsJsonArray.put(stopsJsonObject2);
                             newJson.put("busstops", busStopsJsonArray);
                         }
 
