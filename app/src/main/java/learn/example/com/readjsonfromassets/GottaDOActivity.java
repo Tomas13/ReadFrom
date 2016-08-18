@@ -2,10 +2,12 @@ package learn.example.com.readjsonfromassets;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,10 +56,37 @@ public class GottaDOActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             Log.d("ko", resultJson.toString());
+
+            if (isSDCARDAvailable()) {
+                writeToFile(resultJson.toString());
+            }else {
+                Log.d("ko", "false");
+            }
             textView.setText(resultJson.toString());
         }
     }
 
+
+    private void writeToFile(String string){
+        String filename = "routes.json";
+
+        File sdcard = Environment.getExternalStorageDirectory();
+        File file = new File(sdcard.getPath(), filename);
+        try {
+            FileWriter writer = new FileWriter(file);
+            writer.write(string);
+            writer.flush();
+            writer.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean isSDCARDAvailable(){
+        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+    }
 
     public void process() {
         try {
